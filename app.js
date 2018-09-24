@@ -16,14 +16,26 @@ class UI {
         <td>${book.title}</td>
         <td>${book.author}</td>
         <td>${book.isbn}</td>
-        <td><a href="#" class="delete">X</a></td>
         `;
+        row.addEventListener('click', function() {
+            if(this.className === '') {
+                this.className = 'table-primary';
+            } else {
+                this.className = '';
+            }
+        });
         list.appendChild(row);
+    }
+
+    clearFields() {
+        document.getElementById('bookTitle').value = '';
+        document.getElementById('author').value = '';
+        document.getElementById('isbn').value = '';
     }
 }
 
 //Event listeners
-document.getElementById('book-form').addEventListener('submit', function(e) {
+document.getElementById('submit').addEventListener('click', function() {
     const title = document.getElementById('bookTitle').value,
         author = document.getElementById('author').value,
         isbn = document.getElementById('isbn').value;
@@ -35,5 +47,14 @@ document.getElementById('book-form').addEventListener('submit', function(e) {
     //Add book to list
     ui.addBookToList(book);
 
-    e.preventDefault();
+    ui.clearFields();
+
+    //e.preventDefault();
+});
+
+document.getElementById('delete').addEventListener('click', function(e) {
+ 
+    if(e.classList.contains('table-primary')) {
+        e.remove();
+    }
 });
