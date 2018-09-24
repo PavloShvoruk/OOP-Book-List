@@ -9,7 +9,7 @@ class Book {
 //UI constructor
 class UI {
     addBookToList(book) {
-        const list = document.getElementById('book-list');
+        const list = document.querySelector('.book-list');
         //Create tr element
         const row = document.createElement('tr');
         row.innerHTML = `
@@ -52,9 +52,8 @@ document.getElementById('submit').addEventListener('click', function() {
     //e.preventDefault();
 });
 
-document.getElementById('delete').addEventListener('click', function(e) {
- 
-    if(e.classList.contains('table-primary')) {
+document.getElementById('delete').addEventListener('click', function() {
+    document.querySelectorAll('.table-primary').forEach(function(e) {
         e.remove();
-    }
-});
+      });
+    });
