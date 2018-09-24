@@ -1,1 +1,1 @@
-Book list add via JS classes
+Book list via JS classes
