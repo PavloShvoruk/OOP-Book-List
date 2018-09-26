@@ -48,6 +48,50 @@ class UI {
     }
 }
 
+class Storage {
+    static getBooks() {
+        let books;
+        if(localStorage.getItem('books') === null) {
+            books = [];
+        } else {
+            books = JSON.parse(localStorage.getItem('books'));
+        }
+        return books;
+    }
+    static toLocalStorage(book) {
+        const books = Storage.getBooks();
+
+        books.push(book);
+        localStorage.setItem('books', JSON.stringify(books));
+     }
+
+    static displayBooks() {
+        const books = Storage.getBooks();
+
+        books.forEach((book) => {
+            const ui = new UI;
+
+            //add book to UI
+            ui.addBookToList(book);
+         })
+     }
+
+    static removeBook(title) {
+        const books = Storage.getBooks();
+        
+        books.forEach((book, index) => {
+            if(book.title === title) {
+                books.splice(index, 1);
+            }
+        });
+        
+        localStorage.setItem('books', JSON.stringify(books));
+     }
+}
+
+//dom load event
+document.addEventListener('DOMContentLoaded', Storage.displayBooks);
+
 //Event listeners
 document.getElementById('submit').addEventListener('click', function() {
     const title = document.getElementById('bookTitle').value,
@@ -61,16 +105,22 @@ document.getElementById('submit').addEventListener('click', function() {
         ui.alertMessage("Please fill out the form below", "danger");
     } else {
         //Add book to list
-        ui.alertMessage("Book published", "success");
         ui.addBookToList(book);
+        //Add to localStorage
+        Storage.toLocalStorage(book);
+
+        ui.alertMessage("Book published", "success");
         ui.clearFields();
     }
 });
 
 //delete button functions
 
-const btnDelete = document.getElementById('delete').addEventListener('click', function() {
+const btnDelete = document.getElementById('delete');
+
+btnDelete.addEventListener('click', function() {
     document.querySelectorAll('.table-primary').forEach(function(e) {
         e.remove();
+        Storage.removeBook(e.firstElementChild.textContent);
       });
     });
